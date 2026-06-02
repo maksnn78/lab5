@@ -390,43 +390,45 @@ nano .github/workflows/ci.yml
 ```
 ```yaml
 name: CI
- 
+
 on:
   push:
   pull_request:
- 
+
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
- 
+
     steps:
       - uses: actions/checkout@v4
         with:
           submodules: recursive
- 
+
       - name: Install dependencies
         run: |
           sudo apt-get update
           sudo apt-get install -y cmake g++ lcov
           pip install cpp-coveralls
- 
+
       - name: Configure project
         run: cmake -S . -B build -DBUILD_TESTS=ON
- 
+
       - name: Build project
         run: cmake --build build
- 
+
       - name: Run tests
         run: ctest --test-dir build --output-on-failure
- 
+
       - name: Collect coverage
         run: |
           cd build
-          lcov --capture --directory . --output-file coverage.info
+          lcov --capture --directory . --output-file coverage.info \
+               --ignore-errors mismatch,inconsistent
           lcov --remove coverage.info '/usr/*' '*/third-party/*' '*/tests/*' \
-               --output-file coverage.info
-          lcov --list coverage.info
- 
+               --output-file coverage.info \
+               --ignore-errors empty,inconsistent,unused
+          lcov --list coverage.info --ignore-errors inconsistent
+
       - name: Upload coverage to Coveralls
         env:
           COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
