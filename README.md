@@ -1,7 +1,5 @@
 # Лабораторная работа №5
 ## Аксентьев Максим ИУ8-22
-## CI Status
-![CI](https://github.com/maksnn78/lab5/actions/workflows/ci.yml/badge.svg)
 ## Подготовка репозитория
 ```bash
 git clone https://github.com/tp-labs/lab05 tasks/lab05
